@@ -28,10 +28,12 @@ def get_DOE(doe, dim, population, replicates, function, bounds, rand_noise):
             add = population-sampler.shape[0]
             # BBD design smaller than CCD design, supplement additional points with LHS
             if add > 0:
-                sampler = np.vstack((sampler, qmc.LatinHypercube(dim).random(n=add))) 
+                sampler = np.vstack((sampler, qmc.scale(qmc.LatinHypercube(dim).random(n=add), [-1]*dim, [1]*dim))) 
         x_init = np.zeros((replicates,population,dim))
         y_init = np.zeros((replicates,population))
         min_init = np.zeros(replicates)
+
+        # scale x_init values by multiplier to bound limits (bound limits are symmetrical)
         multiplier = bounds[0][1]/np.max(sampler)
         for r in range(replicates):
             x_init_r = sampler
