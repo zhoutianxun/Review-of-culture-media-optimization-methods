@@ -16,7 +16,7 @@ from optimizers import optimize
 
 # Problem constants ======================================================================================================================
 dim = 5                                          # 5, 20 or 40
-population = 50                                  # 50 for dim=20, 40; for dim=5, determined based on CCD design method
+population = 50                                  # for dim=5, will be ignored if CCD or BBD design method is chosen
 iteration = 10                                   # number of iterations
 offset=0.4                                       # offset value for function input
 noisy = False                                    # if to add noise to function
@@ -35,15 +35,18 @@ methods = ['GA',                                 # methods
            'KRG-truncDE PV',
            'KRG-L-BFGS-B PV']
 
+doe_list = ['lhs', 'bbd', 'ccd']                 # DOE methods. Only relevant for dim=5, for dim=20 or 40, only LHS will be used
 # Unit test for methods
 # methods = [methods[4]]
 
 # Problem variables ======================================================================================================================
 assert dim in (5, 20, 40), "Invalid dimension!"
 if dim==5:
-    save_folder = "1.low dim results " 
-    population = ccdesign(dim).shape[0]
-    doe_list = ['lhs']#, 'bbd', 'ccd']
+    save_folder = "1.low dim results "
+    if 'ccd' in doe_list:
+        population = ccdesign(dim).shape[0]
+    elif 'bbd' in doe_list:
+        population = bbdesign(dim).shape[0]
 elif dim==20:
     save_folder = "2.mid dim results "
     doe_list = ['lhs']    

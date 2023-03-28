@@ -24,9 +24,11 @@ def get_DOE(doe, dim, population, replicates, function, bounds, rand_noise):
         if doe == 'ccd':
             sampler = ccdesign(dim, alpha="r")
         elif doe == 'bbd':
-            init_sampler = bbdesign(dim)
-            add = population-init_sampler.shape[0]
-            sampler = np.vstack((init_sampler, qmc.LatinHypercube(dim).random(n=add)))
+            sampler = bbdesign(dim)
+            add = population-sampler.shape[0]
+            # BBD design smaller than CCD design, supplement additional points with LHS
+            if add > 0:
+                sampler = np.vstack((sampler, qmc.LatinHypercube(dim).random(n=add))) 
         x_init = np.zeros((replicates,population,dim))
         y_init = np.zeros((replicates,population))
         min_init = np.zeros(replicates)

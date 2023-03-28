@@ -11,7 +11,7 @@ conda env create -f environment.yml
 ## Run experiments
 1. Edit the problem constants in `run_experiment.py` to run the experiment of choice
 - **dim** : dimension of problem, choices are 5, 20, or 40
-- **population** : population size of each generation. For dim=5, this will be overridden by 50 which is determined by CCD design method
+- **population** : population size of each generation. For dim=5, this will be ignored if CCD or BBD DOE is chosen, and replaced by the default number as determined by the respective DOE methods
 - **iteration** : number of iterations
 - **offset** : offset value for function input, i.e. f(x) -> g(x - offset), where g is the original BBOB test function. Purpose of offset is prevent the minima solutions at x = 0, which is present in standard DOEs
 - **noisy** : if to add noise to function
@@ -24,4 +24,4 @@ conda env create -f environment.yml
 ```
 python run_experiment.py
 ```
-3. Find results stored in /results folder
+3. Find results stored in corresponding results folder
